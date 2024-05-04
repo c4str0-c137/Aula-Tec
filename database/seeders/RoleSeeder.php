@@ -30,9 +30,9 @@ class RoleSeeder extends Seeder
         
 
         //HORARIOS
-        Permission::create(['name' => 'Horario.index', 'description' => 'Ver ambientes'])->assignRole([$admin2]);
-        Permission::create(['name' => 'Horario.create', 'description' => 'Crear ambiente'])->assignRole([$admin2]);
-        Permission::create(['name' => 'Horario.edit','description' => 'Editar categoria'])->assignRole([$admin2]);
+        Permission::create(['name' => 'horario.index', 'description' => 'Ver ambientes'])->assignRole([$admin2]);
+        Permission::create(['name' => 'horario.create', 'description' => 'Crear ambiente'])->assignRole([$admin2]);
+        Permission::create(['name' => 'horario.edit','description' => 'Editar categoria'])->assignRole([$admin2]);
 
         //Solicitud
         Permission::create(['name'=> 'Solicitud.index', 'description' => 'Solicitar Reserva'])->assignRole([$docente2]);

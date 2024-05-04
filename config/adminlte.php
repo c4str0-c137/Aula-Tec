@@ -327,7 +327,7 @@ return [
             'text' => 'Registrar horarios',
             'url' => 'Horario',
             'icon' => 'far fa-fw fa-file',
-            'can' =>'Horario.index'
+            'can' =>'horario.index'
             // 'label' => 'CRUD',
             // 'label_color' => 'warning',
         ],
@@ -335,7 +335,7 @@ return [
             'text' => 'Notificaciones',
             'route' => 'mensaje.index',
             'icon' => 'far fa-fw fa-envelope',
-            'can' =>'Horario.index'
+            'can' =>'horario.index'
             // 'label' => 'CRUD',
             // 'label_color' => 'warning',
         ],

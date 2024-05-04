@@ -21,7 +21,7 @@ class HorarioController extends Controller
     {}
         /**$horarios = Horario::all();
         $horarios = Horario::with('ambiente')->get();
-        return view('Horario.index')->with('horarios',$horarios);
+        return view('horario.index')->with('horarios',$horarios);
         /*
     
 
@@ -36,7 +36,7 @@ class HorarioController extends Controller
         $horarios = Horario::all();
         $estados = EstadoHorario::all();
         $dias = dia::all();
-        return view('Horario.create', compact('ambientes', 'horarios', 'estados', 'dias'));
+        return view('horario.create', compact('ambientes', 'horarios', 'estados', 'dias'));
     }
 
     

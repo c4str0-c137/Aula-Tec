@@ -39,11 +39,9 @@ Route::get('/get-ambientes', [AmbienteController::class, 'getAmbientes'])->name(
 
 Route::get('/ambiente_horarios', [AmbienteHorarioController::class, 'index'])->name('ambiente_horarios.index')->middleware('auth');
 
-Route::get('/Horario/create', [HorarioController::class, 'create'])->name('Horario.create')->middleware('auth');
-
 Route::post('/ambiente_horarios', [AmbienteHorarioController::class, 'store'])->name('ambiente_horarios.store')->middleware('auth');
 
-Route::get('/horario/create', [HorarioController::class, 'create'])->name('Horario.create')->middleware('auth');
+Route::get('/horario/create', [HorarioController::class, 'create'])->name('horario.create')->middleware('auth');
 
 Route::put('/Ambiente/{ambiente}', [AmbienteController::class, 'update'])->name('ambiente.update')->middleware('auth');
 

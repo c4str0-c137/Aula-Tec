@@ -8,7 +8,7 @@
 @stop
 
 @section('content')
-    <a href="{{ route('Horario.create') }}" class="btn btn-primary mb-3">CREAR</a>
+    <a href="{{ route('horario.create') }}" class="btn btn-primary mb-3">CREAR</a>
     @if(Auth::check() && Auth::user()->id_rol === 1)
         <div class="container-fluid">
     <div class="container">
