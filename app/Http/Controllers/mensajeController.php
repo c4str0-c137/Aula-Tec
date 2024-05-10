@@ -54,8 +54,19 @@ class mensajeController extends Controller
         }
         return redirect()->back()->with('message', 'Reserva enviada');
     }
+    public function index() 
+    {
+        $notificationsData = $this->dataNotification();
+        return view('mensaje.notifications', compact('notificationsData'));
+    }
+    
+    public function unico($notificationId)
+    {
+        $notificationsData = $this->dataNotification();
+        return view('mensaje.detalle', compact('notificationsData','notificationId'));
+    }
 
-    public function index()
+    public function dataNotification()
     {
         $user = auth()->user();
         $postNotifications = $user->unreadNotifications;
@@ -95,8 +106,7 @@ class mensajeController extends Controller
                 'created_at' => $notification->created_at,
             ];
         }
-
-        return view('mensaje.notifications', compact('notificationsData'));
+        return $notificationsData;
     }
 
     public function confirmarReserva(Request $request)

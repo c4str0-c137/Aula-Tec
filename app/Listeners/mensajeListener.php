@@ -27,7 +27,7 @@ class mensajeListener
      */
     public function handle($event)
     {
-        $user = User::find(1);
+        $user = User::find(1); //Solo envia a admin 1
         Notification::send($user, new Notificaciones($event->mensaje));
     }
 }

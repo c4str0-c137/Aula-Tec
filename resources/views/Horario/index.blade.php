@@ -12,7 +12,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('horario.create') }}" class="btn btn-primary mb-3">CREAR</a>
+                    <a href="{{ route('Horario.create') }}" class="btn btn-primary mb-3">CREAR</a>
                 </div>
             </div>
             <h2>Filtros</h2>

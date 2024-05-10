@@ -4,6 +4,7 @@ use App\Http\Controllers\AcontecimientoController;
 use App\Http\Controllers\AmbienteController;
 use App\Http\Controllers\AmbienteHorarioController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
@@ -39,16 +40,16 @@ Route::get('/get-ambientes', [AmbienteController::class, 'getAmbientes'])->name(
 
 Route::get('/ambiente_horarios', [AmbienteHorarioController::class, 'index'])->name('ambiente_horarios.index')->middleware('auth');
 
-Route::post('/ambiente_horarios', [AmbienteHorarioController::class, 'store'])->name('ambiente_horarios.store')->middleware('auth');
+Route::get('/Horario/create', [HorarioController::class, 'create'])->name('Horario.create')->middleware('auth');
 
-Route::get('/horario/create', [HorarioController::class, 'create'])->name('horario.create')->middleware('auth');
+Route::post('/ambiente_horarios', [AmbienteHorarioController::class, 'store'])->name('ambiente_horarios.store')->middleware('auth');
 
 Route::put('/Ambiente/{ambiente}', [AmbienteController::class, 'update'])->name('ambiente.update')->middleware('auth');
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
 //USUARIOS
-Route::resource('users', 'UserController')
+Route::resource('users', UserController::class)
                 ->except('create', 'edit')
                 ->names('users');
 
@@ -61,6 +62,7 @@ Route::post('/guardar-solicitud', [ReservaController::class, 'guardarSolicitud']
 Route::middleware(['auth'])->group(function(){
     Route::resource('mensaje', mensajeController::class);
     Route::resource('reserva', ReservaController::class);
+    Route::get('/mensaje/detalle/{notificationId}', [mensajeController::class,'unico'])->name('mensaje.unico');
     Route::get('/solicitud', [ReservaController::class, 'solicitud'])->name('reserva.solicitud');
 
     Route::get('markAsRead', function(){

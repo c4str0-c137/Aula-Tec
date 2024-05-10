@@ -24,7 +24,7 @@ class AmbienteHorarioController extends Controller
         $horarios = Horario::all();
         $dias = dia::all();
         $estados=EstadoHorario::all();
-        return view('horario.index', compact('ambienteHorarios','ambientes','departamentos','horarios','dias',"estados"));
+        return view('Horario.index', compact('ambienteHorarios','ambientes','departamentos','horarios','dias',"estados"));
     }
 
     /**
@@ -38,7 +38,7 @@ class AmbienteHorarioController extends Controller
     $estados = EstadoHorario::all();
     $dias = dia::all();
     $horarios = Horario::all();
-    return view('horario.create', compact('estados', 'dias', 'horarios'));
+    return view('Horario.create', compact('estados', 'dias', 'horarios'));
 }
     /**
      * Store a newly created resource in storage.
@@ -106,7 +106,7 @@ class AmbienteHorarioController extends Controller
     $dias = Dia::all();
     $estados = EstadoHorario::all();
 
-    return view('horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados'));
+    return view('Horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados'));
 }
     /**
  * Update the specified resource in storage.
@@ -134,7 +134,7 @@ public function update(Request $request, $id)
 
     $ambienteHorario->save();
 
-    return redirect()->route('horario.index')->with('success', 'El ambiente y horario se han actualizado correctamente.');
+    return redirect()->route('Horario.index')->with('success', 'El ambiente y horario se han actualizado correctamente.');
 }
     
 /**

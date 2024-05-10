@@ -4,7 +4,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    background-color: #fff;
+    background-color: #f9f9f9; /* Cambiar el color de fondo */
 }
 
 .ui-datepicker-calendar td {
@@ -12,14 +12,20 @@
 }
 
 .ui-datepicker-header {
-    background-color: #f3f4f6;
-    border-bottom: 1px solid #ccc;
+    background-color: #007bff; /* Cambiar el color del encabezado */
+    border-bottom: 1px solid #0056b3; /* Ajustar el color del borde inferior */
 }
 
 .ui-datepicker-prev,
 .ui-datepicker-next {
     margin-top: 2px;
     cursor: pointer;
+    color: #007bff; /* Cambiar el color de los botones de navegación */
+}
+
+.ui-datepicker-prev:hover,
+.ui-datepicker-next:hover {
+    color: #0056b3; /* Cambiar el color al pasar el cursor sobre los botones */
 }
 
 .ui-datepicker-calendar .ui-state-active {
@@ -31,10 +37,29 @@
 .ui-datepicker-calendar .ui-state-disabled {
     color: #ccc;
 }
+
 .input-group {
     max-width: 250px;
 }
 
 #fecha {
     width: calc(100% - 38px); 
+}
+
+.error-message {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.current-day {
+    border: 1px solid black; /* Solo un borde negro */
+    color: black; /* Color del texto para el día actual (negro) */
+    font-weight: bold; /* Texto en negrita para el día actual */
+    transition: background-color 0.3s, color 0.3s; /* Agregar una transición suave */
+}
+
+.current-day:hover {
+    background-color: #f9f9f9; /* Cambiar el color de fondo al pasar el cursor sobre el día actual */
+    color: black; /* Mantener el texto negro */
 }
