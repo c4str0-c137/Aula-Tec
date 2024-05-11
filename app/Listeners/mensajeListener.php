@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Listeners;
-use App\Notifications\Notificaciones;
+use App\Notifications\notificaciones;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;

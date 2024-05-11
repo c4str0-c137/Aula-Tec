@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Events\mensajeEvent;
-use App\Notifications\Notificaciones;
+use App\Notifications\notificaciones;
 use App\Models\Mensaje;
 use App\Models\User;
 use App\Models\Reserva;
