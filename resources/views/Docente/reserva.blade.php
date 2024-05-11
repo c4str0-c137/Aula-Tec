@@ -36,7 +36,7 @@
                         <select id="materia" name="materia" class="form-control" tabindex="4">
                             <option value="">Seleccione una Materia</option>
                             @foreach($materias as $materia)
-                                <option value="{{ $materia }}">{{ $materia }}</option>
+                                <option value="{{ $materia->nombre_materia }}">{{ $materia->nombre_materia }}</option>
                             @endforeach
                         </select>
                         <div id="materiaError" class="error-message position-absolute bg-danger text-white py-2 px-3 rounded" style="display: none; z-index: 100; top: 100%; left: 0; right: 0;">
@@ -141,7 +141,7 @@
                     success: function(response) {
                         $('#grupo').empty();
                         $.each(response, function(id, grupo) {
-                            $('#grupo').append('<option value="' + id + '">' + grupo + '</option>');
+                            $('#grupo').append('<option value="' + grupo.id + '">' + grupo.nombre + '</option>');
                         });
                     }
                 });

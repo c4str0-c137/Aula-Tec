@@ -30,50 +30,71 @@ class ReservaController extends Controller
         $acontecimientos = Acontecimiento::all();
     
         // Nombre del usuario actualmente autenticado
-        $userName = Auth::user()->name;
-    
-        // Consulta SQL para obtener las materias y grupos del usuario
-        $result = DB::select("
-            SELECT u.name AS nombre_usuario, 
-                GROUP_CONCAT(DISTINCT m.nombre) AS materias,
-                GROUP_CONCAT(DISTINCT g.grupo) AS grupos
-            FROM usuario_materias um 
-            JOIN users u ON um.id_user = u.id 
-            JOIN materias m ON um.id_grupo_materia = m.id 
-            JOIN grupos g ON um.id_grupo_materia = g.id 
-            WHERE u.name = :userName 
-            GROUP BY u.name;
+        $userName = Auth::user()->id;
+
+        // Consulta SQL para obtener las materias del usuario
+        $materias = DB::select("
+        SELECT DISTINCT
+                u.id AS id_usuario,
+                u.name AS nombre_usuario,
+                m.id AS id_materia,
+                m.nombre AS nombre_materia
+            FROM 
+                usuario_materias um  
+            JOIN 
+                users u ON um.id_user = u.id  
+            JOIN 
+                grupo_materias mg ON um.id_grupo_materia = mg.id  
+            JOIN 
+                materias m ON mg.id_materia = m.id  
+            WHERE 
+                u.id = :userName;
         ", ['userName' => $userName]);
-    
-        // Verificar si se obtuvieron resultados
-        if (!empty($result)) {
-            $materias = explode(',', $result[0]->materias);
-            $grupos = explode(',', $result[0]->grupos);
-        } else {
-            $materias = [];
-            $grupos = [];
-        }
+
+        // Consulta SQL para obtener los grupos del usuario
+        $grupos = DB::select("
+            SELECT 
+                u.id AS id_usuario,
+                u.name AS nombre_usuario,
+                g.id AS id_grupo,
+                g.grupo AS nombre_grupo
+            FROM 
+                usuario_materias um  
+            JOIN 
+                users u ON um.id_user = u.id  
+            JOIN 
+                grupo_materias mg ON um.id_grupo_materia = mg.id  
+            JOIN 
+                grupos g ON mg.id_grupo = g.id  
+            WHERE 
+                u.id = :userName;
+        ", ['userName' => $userName]);
+
         $horarios = horario::all();
         $Ambientes = ambiente::all();
         $tiposAmbiente = TipoAmbiente::all();
 
-        return view('Docente.reserva', compact('tiposAmbiente', 'materias', 'acontecimientos', 'grupos', 'horarios'));
+        return view('Docente.reserva', compact('tiposAmbiente', 'materias', 'acontecimientos', 'horarios'));
     }
 
     public function getGrupos(Request $request)
-    {
-        $nombreMateria = $request->input('nombre_materia');
+{
+    $nombreMateria = $request->input('nombre_materia');
 
-        $idMateria = Materia::where('nombre', $nombreMateria)->value('id');
+    $idMateria = Materia::where('nombre', $nombreMateria)->value('id');
 
-        $gruposMateria = Grupo_Materia::where('id_materia', $idMateria)->get();
+    $gruposMateria = Grupo_Materia::where('id_materia', $idMateria)->get();
 
-        $grupos = $gruposMateria->map(function ($grupoMateria) {
-            return $grupoMateria->grupo->grupo;
-        });
+    $grupos = $gruposMateria->map(function ($grupoMateria) {
+        return [
+            'id' => $grupoMateria->grupo->id,
+            'nombre' => $grupoMateria->grupo->grupo
+        ];
+    });
 
-        return response()->json($grupos);
-    }
+    return response()->json($grupos);
+}
+
 
 public function guardarSolicitud(Request $request)
 {
@@ -86,27 +107,25 @@ public function guardarSolicitud(Request $request)
         'tipo_ambiente' => 'required'
     ]);
     $id_usuario = Auth::id();
+    $nombreMateria = $request->input('materia');
+    $idGrupo = $request->input('grupo');
+    // Obtener el ID de la tabla 'grupo_materias' usando el nombre de la materia y el nombre del grupo
+    $idMateria      = DB::table("materias")->where("nombre",$nombreMateria)->value('id');
+    $idGrupoMateria = DB::table("grupo_materias")->where("id_grupo", $idGrupo)->where('id_materia',$idMateria)->value('id');
+    $id_usuario_materia = DB::table("usuario_materias")->where('id_user',$id_usuario)->where('id_grupo_materia',$idGrupoMateria)->value('id');
+
     $horariosSeleccionados = $request->input('horario');
     foreach ($horariosSeleccionados as $horario) {
         $reserva = new Reserva();
         $reserva->capacidad = $request->input('capacidad');
         $reserva->fecha_reserva = $request->input('fecha');
-        $reserva->id_usuario_materia = $id_usuario;
+        $reserva->id_usuario_materia = $id_usuario_materia;
         $reserva->id_acontecimiento = $request->input('motivo');
         $reserva->id_horario = $horario;
         $reserva->id_tipoAmbiente = $request->input('tipo_ambiente');
         $reserva->save();
     }
     $mensaje = new mensajeController();
-    $id_usuario_materia = 3; // Las relaciones para obtener ese id correcto con las materias y grupos seleccionados
-                            // Cambiar ese uno por id obtenido 
-                            /** 
-                             * Si cambias los numeros a id_usuario_materia ese seran los resultados 
-                             * 1  ->          tis - grupo 1
-                             * 2  ->          intro - grupo 2
-                             * 3  ->          tis - grupo 3
-                             * 4  ->          intro - grupo 4
-                             */
     $mensaje->enviarSolicitud($request,$id_usuario_materia);
     return redirect()->route('docente');
 }
