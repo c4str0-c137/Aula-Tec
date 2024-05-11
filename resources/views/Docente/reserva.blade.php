@@ -20,6 +20,15 @@
                             <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de Usuario" readonly>
                         @endif
                     </div>
+                    <div class="col-md-6">
+                        <label for="tipo_ambiente" class="form-label">Tipo de Ambiente</label>
+                        <select id="tipo_ambiente" name="tipo_ambiente" class="form-control" tabindex="4">
+                            <option value="">Seleccione el tipo de ambiente</option>
+                            @foreach($tiposAmbiente as $tipoAmbiente)
+                                <option value="{{ $tipoAmbiente->id }}">{{ $tipoAmbiente->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="mb-3 row">
                     <div class="col position-relative">
@@ -42,6 +51,7 @@
                         <div id="grupoError" class="text-danger"></div>
                     </div>
                 </div>
+        
                 <div class="mb-3 row">
                     <div class="col position-relative">
                         <label for="capacidad" class="form-label">Capacidad</label>
@@ -120,27 +130,27 @@
 <script>
     $(document).ready(function() {
         $('#materia').change(function() {
-    var materiaNombre = $(this).val();
-    if (materiaNombre) {
-        $.ajax({
-            url: '{{ route("getGrupos") }}',
-            type: 'GET',
-            data: {
-                nombre_materia: materiaNombre
-            },
-            success: function(response) {
-                $('#grupo').empty();
-                $.each(response, function(id, grupo) {
-                    $('#grupo').append('<option value="' + id + '">' + grupo + '</option>');
+            var materiaNombre = $(this).val();
+            if (materiaNombre) {
+                $.ajax({
+                    url: '{{ route("getGrupos") }}',
+                    type: 'GET',
+                    data: {
+                        nombre_materia: materiaNombre
+                    },
+                    success: function(response) {
+                        $('#grupo').empty();
+                        $.each(response, function(id, grupo) {
+                            $('#grupo').append('<option value="' + id + '">' + grupo + '</option>');
+                        });
+                    }
                 });
+            } else {
+                $('#grupo').empty();
             }
         });
-    } else {
-        $('#grupo').empty();
-    }
-});
 
-    $.datepicker.setDefaults($.datepicker.regional['es']);
+        $.datepicker.setDefaults($.datepicker.regional['es']);
         $('#fecha').datepicker({
             dateFormat: 'yy-mm-dd',
             changeMonth: true,
@@ -170,81 +180,81 @@
             dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
         });
 
-    $('#seleccionarFecha').click(function() {
-        $('#fecha').datepicker('show');
-    });
+        $('#seleccionarFecha').click(function() {
+            $('#fecha').datepicker('show');
+        });
 
-    $('#solicitudForm').submit(function(e) {
-        e.preventDefault();
-        var materiaSeleccionada = $('#materia').val();
+        $('#solicitudForm').submit(function(e) {
+            e.preventDefault();
+            var materiaSeleccionada = $('#materia').val();
             if (!materiaSeleccionada) {
                 $('#materiaError').text('Por favor, seleccione una materia').show();
                 setTimeout(function() {
                     $('#materiaError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        var capacidad = $('#capacidad').val();
+            }
+            var capacidad = $('#capacidad').val();
             if (!(/^\d+$/.test(capacidad))) {
                 $('#capacidadError').text('Ingrese un valor entero entre 1 y 200').show();
                 setTimeout(function() {
                     $('#capacidadError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        capacidad = parseInt(capacidad);
+            }
+            capacidad = parseInt(capacidad);
             if (capacidad < 1 || capacidad > 200) {
                 $('#capacidadError').text('Ingrese un valor entero entre 1 y 200').show();
                 setTimeout(function() {
                     $('#capacidadError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        var motivoSeleccionado = $('#motivo').val();
+            }
+            var motivoSeleccionado = $('#motivo').val();
             if (!motivoSeleccionado) {
                 $('#acontecimientoError').text('Seleccione el motivo para su reserva').show();
                 setTimeout(function() {
                     $('#acontecimientoError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        var horarioSeleccionado = $("input[name='horario[]']:checked").length;
+            }
+            var horarioSeleccionado = $("input[name='horario[]']:checked").length;
             if (horarioSeleccionado === 0) {
                 $('#horarioError').text('Por favor Seleccione un al menos horario').show();
                 setTimeout(function() {
                     $('#horarioError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        var fechaSeleccionada = $('#fecha').val();
+            }
+            var fechaSeleccionada = $('#fecha').val();
             if (!fechaSeleccionada) {
                 $('#fechaError').text('Por favor, Elija una fecha').show();
                 setTimeout(function() {
                     $('#fechaError').fadeOut('slow');
                 }, 3000);
                 return;
-        }
-        $.ajax({
-            url: $(this).attr('action'),
-            method: $(this).attr('method'),
-            data: $(this).serialize(),
-            success: function(response) {
-                Swal.fire({
-                    title: 'Solicitud enviada exitosamente',
-                    text: '¡Gracias por enviar tu solicitud!',
-                    icon: 'success',
-                    timer: 1500,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                }).then((result) => {
-                    window.location.href = "docente";
-                });
-            },
-            error: function(xhr, status, error) {
             }
+            $.ajax({
+                url: $(this).attr('action'),
+                method: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Solicitud enviada exitosamente',
+                        text: '¡Gracias por enviar tu solicitud!',
+                        icon: 'success',
+                        timer: 1500,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    }).then((result) => {
+                        window.location.href = "docente";
+                    });
+                },
+                error: function(xhr, status, error) {
+                }
+            });
         });
     });
-});
 
 </script>
 @endpush

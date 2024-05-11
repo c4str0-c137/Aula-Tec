@@ -27,9 +27,16 @@
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="tipo" class="form-label">Tipo de ambiente</label>
-                    <input id="tipo" name="tipo" type="text" class="form-control" value="{{$Ambiente->tipoDeAmbiente}}" tabindex="3" maxlength="30">
-                    <div id="tipoError" class="text-danger"></div>
+                <label for="tipoAmbiente" class="form-label">Tipo de ambiente</label>
+                 <select id="tipoAmbiente" name="tipoAmbiente" class="form-control" tabindex="2" required>
+    
+                  <option value="">Seleccione un tipo de ambiente</option>
+                  @foreach($tipoambientes as $tipoAmbiente) <!-- Cambiar a $tipoambientes -->
+                  <option value="{{ $tipoAmbiente->id }}" @if($Ambiente->id_tipoAmbiente == $tipoAmbiente->id) selected @endif>{{ $tipoAmbiente->nombre }}</option>
+                  @endforeach
+                  </select>
+                  <div id="TipoAmbienteError" class="text-danger"></div>
+
                 </div>
                 
                 <div class="mb-3">
@@ -41,6 +48,14 @@
                         @endforeach
                     </select>
                     <div id="ubicacionError" class="text-danger"></div>
+                </div>
+                </div>
+
+                <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="numeroaula" class="form-label">Numero de aula</label>
+                    <input id="numeroaula" name="numeroaula" type="text" class="form-control" value="{{$Ambiente->numeroaula}}" tabindex="1" maxlength="30">
+                    <div id="numeroaulaError" class="text-danger"></div>
                 </div>
             </div>
         </div>
@@ -65,15 +80,17 @@
             function checkFormValidity() {
                 var departamento = $('#departamento').val();
                 var capacidad = $('#capacidad').val();
-                var tipo = $('#tipo').val();
+                var tipo = $('#tipoAmbiente').val();
                 var ubicacion = $('#ubicacion').val();
+                var numeroaula = $('#numeroaula').val();
+                
 
                 // Validar que los campos no estén vacíos
-                if (!departamento || !capacidad || !tipo || !ubicacion) {
+                if (!departamento || !capacidad || !tipo || !ubicacion ||!numeroaula) {
                     $('#guardarBtn').prop('disabled', true);
                     return;
                 }
-
+                
                 // Validar campo Departamento
                 var departamentoRegex = /^[a-zA-Z0-9\s]*$/u;
                 if (!departamentoRegex.test(departamento.trim()) && departamento.trim() !== '') {
@@ -85,10 +102,21 @@
                         $('#guardarBtn').prop('disabled', true);
                     }
                 }
-
+                 //validar numero de aula
+                 var numeroaulaRegex = /^[a-zA-Z0-9\s]*$/u;
+                if (!numeroaulaRegex.test(numeroaula.trim()) && numeroaula.trim() !== '') {
+                    $('#numeroaulaError').text('El campo numero de aula solo debe contener letras, números y espacios.');
+                    $('#guardarBtn').prop('disabled', true);
+                } else {
+                    $('#numeroaulaError').text('');
+                    if (numeroaula.trim().length < 3 || numeroaula.trim().length > 30) {
+                        $('#guardarBtn').prop('disabled', true);
+                    }
+                }
+                
                 // Validar campo Capacidad
-                if (isNaN(capacidad.trim()) || capacidad.trim() < 25 || capacidad.trim() > 120) {
-                    $('#capacidadError').text('La capacidad debe estar entre 25 y 120.');
+                if (isNaN(capacidad.trim()) || capacidad.trim() < 25 || capacidad.trim() > 200) {
+                    $('#capacidadError').text('La capacidad debe estar entre 25 y 200.');
                     $('#guardarBtn').prop('disabled', true);
                 } else {
                     $('#capacidadError').text('');
@@ -103,20 +131,10 @@
                     $('#capacidadError').text('');
                 }
 
-                // Validar campo Tipo de Ambiente
-                var tipoRegex = /^[a-zA-Z0-9\s]*$/u;
-                if (!tipoRegex.test(tipo.trim()) && tipo.trim() !== '') {
-                    $('#tipoError').text('El campo tipo solo debe contener letras, números y espacios.');
-                    $('#guardarBtn').prop('disabled', true);
-                } else {
-                    $('#tipoError').text('');
-                    if (tipo.trim().length < 4 || tipo.trim().length > 30) {
-                        $('#guardarBtn').prop('disabled', true);
-                    }
-                }
+                
             }
 
-            $('#departamento, #capacidad, #tipo, #ubicacion').change(function() {
+            $('#departamento, #capacidad, #tipo, #ubicacion, #numeroaula').change(function() {
                 checkFormValidity();
             });
 

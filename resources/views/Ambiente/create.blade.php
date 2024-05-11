@@ -26,10 +26,15 @@
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="tipo" class="form-label">Tipo de ambiente</label>
-                    <input id="tipo" name="tipo" type="text" class="form-control" tabindex="3" maxlength="30">
-                    <div id="tipoError" class="text-danger"></div>
-                </div>
+                 <label for="tipoAmbiente" class="form-label">Tipo de ambiente</label>
+                  <select id="tipoAmbiente" name="tipoAmbiente" class="form-control" tabindex="2" required>
+                   <option value="">Seleccione un tipo de ambiente</option>
+                  @foreach($tipoambientes as $tipoAmbiente)
+                    <option value="{{ $tipoAmbiente->id }}">{{ $tipoAmbiente->nombre }}</option>
+                  @endforeach
+               </select>
+             <div id="tipoAmbienteError" class="text-danger"></div>
+            </div>
 
                 <div class="mb-3">
                     <label for="ubicacion" class="form-label">Ubicación</label>
@@ -41,6 +46,15 @@
                     </select>
                     <div id="ubicacionError" class="text-danger"></div>
                 </div>
+                </div>
+                <div class="col-md-6">
+                 <div class="mb-3">
+                    <label for="numeroaula" class="form-label">Numero de aula</label>
+                    <input id="numerodeaula" name="numeroaula" type="text" class="form-control" tabindex="1" maxlength="30">
+                    <div id="numeroaulaError" class="text-danger"></div>
+                 </div> 
+
+                
             </div>
         </div>
         
@@ -67,7 +81,7 @@
             function checkFormValidity() {
                 var departamento = $('#departamento').val();
                 var capacidad = $('#capacidad').val();
-                var tipo = $('#tipo').val();
+                var tipo = $('#tipoAmbiente').val();
                 var ubicacion = $('#ubicacion').val();
 
                 // Validar que los campos no estén vacíos
@@ -106,17 +120,7 @@
                     $('#capacidadError').text('');
                 }
 
-                // Validar campo Tipo de Ambiente
-                var tipoRegex = /^[a-zA-Z0-9\s]*$/u;
-                if (!tipoRegex.test(tipo.trim()) && tipo.trim() !== '') {
-                    $('#tipoError').text('El campo tipo solo debe contener letras, números y espacios.');
-                    $('#guardarBtn').prop('disabled', true);
-                } else {
-                    $('#tipoError').text('');
-                    if (tipo.trim().length < 4 || tipo.trim().length > 30) {
-                        $('#guardarBtn').prop('disabled', true);
-                    }
-                }
+               
             }
 
            

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\mensajeController;
+
+
 use App\Models\Reserva;
 
 /*
@@ -36,6 +38,7 @@ Route::resource('Ambiente', AmbienteController::class)->middleware('auth');
 
 Route::resource('Horario', AmbienteHorarioController::class)->middleware('auth');
 
+
 Route::get('/get-ambientes', [AmbienteController::class, 'getAmbientes'])->name('get.ambientes')->middleware('auth');
 
 Route::get('/ambiente_horarios', [AmbienteHorarioController::class, 'index'])->name('ambiente_horarios.index')->middleware('auth');
@@ -59,6 +62,12 @@ Route::get('/solicitud-reserva', [ReservaController::class, 'index'])->name('sol
 Route::get('/get-grupos', [ReservaController::class, 'getGrupos'])->name('getGrupos')->middleware('docente');
 Route::post('/guardar-solicitud', [ReservaController::class, 'guardarSolicitud'])->name('guardar_solicitud')->middleware('docente');
 
+//Route::post('/buscarAmbientes', [mensajeController::class, 'buscarAmbientes'])->name('buscarAmbientes');
+//Route::post('/buscarAmbientes', [mensajeController::class, 'buscarAmbientes'])->name('buscarAmbientes');
+
+
+
+
 Route::middleware(['auth'])->group(function(){
     Route::resource('mensaje', mensajeController::class);
     Route::resource('reserva', ReservaController::class);
@@ -74,7 +83,7 @@ Route::middleware(['auth'])->group(function(){
 });
 Route::get('/mensaje/create', [mensajeController::class, 'create'])->name('mensaje.create')->middleware('auth');
 
+Route::put('/Horario/{id}', [AmbienteHorarioController::class, 'update'])->name('Horario.update')->middleware('auth');
 
-
-
+Route::post('/buscar-ambientes', [mensajeController::class, 'buscarAmbientes'])->name('buscarAmbientes');
 

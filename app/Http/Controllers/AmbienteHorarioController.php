@@ -8,6 +8,8 @@ use App\Models\EstadoHorario;
 use Illuminate\Http\Request;
 use App\Models\Horario;
 use App\Models\Ambiente;
+use App\Models\TipoAmbiente;
+
 
 class AmbienteHorarioController extends Controller
 {
@@ -85,12 +87,6 @@ class AmbienteHorarioController extends Controller
 
     return response()->json(['success' => 'Los ambientes han sido registrados correctamente.'], 200);
 }
-
-
-
-
-
-
     /**
      * Display the specified resource.
      *
@@ -98,45 +94,18 @@ class AmbienteHorarioController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function edit($id)
-{
-    $ambienteHorario = AmbienteHorario::findOrFail($id);
-    $ambientes = Ambiente::all(); // Esto podría no ser necesario en este contexto
-    $horarios = Horario::all();
-    $dias = Dia::all();
-    $estados = EstadoHorario::all();
-
-    return view('Horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados'));
-}
-    /**
- * Update the specified resource in storage.
- *
- * @param  \Illuminate\Http\Request  $request
- * @param  int  $id
- * @return \Illuminate\Http\Response
- */
-public function update(Request $request, $id)
-{
-    // Validar los datos del formulario
-    $request->validate([
-        'id_ambiente' => 'required',
-        'id_horario' => 'required',
-        'id_dia' => 'required',
-        'id_estado_horario' => 'required',
-    ]);
-
-    $ambienteHorario = AmbienteHorario::findOrFail($id);
-
-    $ambienteHorario->id_ambiente = $request->id_ambiente;
-    $ambienteHorario->id_horario = $request->id_horario;
-    $ambienteHorario->id_dia = $request->id_dia;
-    $ambienteHorario->id_estado_horario = $request->id_estado_horario;
-
-    $ambienteHorario->save();
-
-    return redirect()->route('Horario.index')->with('success', 'El ambiente y horario se han actualizado correctamente.');
-}
-    
+     public function edit($id)
+     {
+         $ambienteHorario = AmbienteHorario::findOrFail($id);
+         $ambientes = Ambiente::all(); 
+         $horarios = Horario::all();
+         $dias = Dia::all();
+         $estados = EstadoHorario::all();
+         $tipoambientes = TipoAmbiente::all(); 
+     
+         return view('Horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados', 'tipoambientes')); 
+     }
+      
 /**
  * Remove the specified resource from storage.
  *
@@ -144,15 +113,46 @@ public function update(Request $request, $id)
  * @return \Illuminate\Http\Response
  */
 
- public function destroy($id)
- {
-     $ambienteHorario = AmbienteHorario::find($id);
-     if ($ambienteHorario) {
-         $ambienteHorario->id_estado_horario = 2; 
+    public function destroy($id)
+    {
+        $ambienteHorario = AmbienteHorario::find($id);
+        if ($ambienteHorario) {
+            $ambienteHorario->id_estado_horario = 2; 
+            $ambienteHorario->save();
+            return redirect('/Horario')->with('success', 'El horario se ha desactivado correctamente.');
+        } else {
+            return redirect('/Horario')->with('error', 'El horario no se encontró.');
+        }
+    }
+
+    public function horarios()
+    {
+        return $this->hasMany(Horario::class);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'id_horario' => 'required',
+            'id_dia' => 'required',
+            'id_estado_horario' => 'required',
+            'id_tipoAmbiente' => 'required',
+        ]);
+
+        $ambienteHorario = AmbienteHorario::findOrFail($id);
+
+        $ambienteHorario->id_horario = $request->id_horario;
+        $ambienteHorario->id_dia = $request->id_dia;
+        $ambienteHorario->id_estado_horario = $request->id_estado_horario;
+        $ambienteHorario->ambiente->id_tipoAmbiente = $request->id_tipoAmbiente;
+
+        $ambienteHorario->ambiente->save();
+
         $ambienteHorario->save();
-         return redirect('/Horario')->with('success', 'El horario se ha desactivado correctamente.');
-     } else {
-         return redirect('/Horario')->with('error', 'El horario no se encontró.');
-     }
- }
+        return redirect()->route('Horario.index')->with('success', 'El ambiente y horario se han actualizado correctamente.');
+    }
+    
+    
+
+
 }

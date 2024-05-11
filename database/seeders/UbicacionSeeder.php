@@ -15,7 +15,7 @@ class UbicacionSeeder extends Seeder
     public function run()
     {
         Ubicacion::create([
-            'nombre' => 'Edificio Nuevo',
+            'nombre' => 'Planta baja',
         ]);
     }
 }

@@ -59,6 +59,8 @@ class notificaciones extends Notification
         return [
             'mensaje'  => $this->mensaje->id,
             'materia' => $this->mensaje->materia,
+            'tipo_ambiente' => $this->mensaje->tipo_ambiente,
+            'idusuario_materias' => $this->mensaje->idusuario_materias,
             'capacidad' => $this->mensaje->capacidad,
             'grupo'   =>  $this->mensaje->grupo,
             'motivo' => $this->mensaje->motivo,

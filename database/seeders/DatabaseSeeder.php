@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this ->call(EstadoSeeder::class);
         $this ->call(UserSeeder::class);
         $this ->call(UbicacionSeeder::class);
+        $this ->call(TipoAmbienteSeeder::class);
         $this ->call(AmbienteSeeder::class);
         $this ->call(HorarioSeeder::class);
         $this ->call(DialSeeder::class);
@@ -28,5 +29,7 @@ class DatabaseSeeder extends Seeder
         $this ->call(GrupoMateriasSeeder::class);
         $this ->call(UsuarioMateriasSeeder::class); 
         $this ->call(acontecimientoSeeder::class);
+        
+
     }
 }

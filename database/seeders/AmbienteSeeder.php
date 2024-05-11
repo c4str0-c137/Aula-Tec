@@ -17,23 +17,26 @@ class AmbienteSeeder extends Seeder
         Ambiente::create([
             'departamento' => 'Fisica',
             'capacidad' => '200',
-            'tipoDeAmbiente' => 'Auditorio',
+            'id_tipoAmbiente' => 2,
             'id_ubicacion' => 1,
-            'id_estado' => 1,
+            'numeroaula' =>'691A',
+            'id_estado' => 1
         ]);
         Ambiente::create([
             'departamento' => 'matematicas',
             'capacidad' => '20',
-            'tipoDeAmbiente' => '623',
+            'id_tipoAmbiente' => 1,
             'id_ubicacion' => 1,
-            'id_estado' => 1,
+            'numeroaula' =>'692A',
+            'id_estado' => 1
         ]);
         Ambiente::create([
             'departamento' => 'Fisica',
             'capacidad' => '20',
-            'tipoDeAmbiente' => '624',
+            'id_tipoAmbiente' => 3,
             'id_ubicacion' => 1,
-            'id_estado' => 1,
+            'numeroaula' =>'690A',
+            'id_estado' => 1
         ]);
     }
 }

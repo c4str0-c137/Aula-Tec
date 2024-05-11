@@ -23,9 +23,9 @@
                  </div>
            <div id="estadoError" class="text-danger"></div>
            <div class="mb-3">
-           <label for="id_dia" class="form-label">Día</label>
+           <label for="id_dia" class="form-label">Dia</label>
             <select id="id_dia" name="id_dia" class="form-control" tabindex="2" required>
-            <option value="">Seleccione un día</option>
+            <option value="">Seleccione un dia</option>
                 @foreach($dias as $dia)
                <option value="{{ $dia->id }}" {{ $dia->id == $ambienteHorario->dia->id ? 'selected' : '' }}>{{ $dia->nombre }}</option>
                 @endforeach
@@ -43,16 +43,15 @@
                   <div id="horarioError" class="text-danger"></div>
                 </div>
                 <div class="mb-3">
-            <label for="id_ambiente" class="form-label">Ambiente</label>
-             <select id="id_ambiente" name="id_ambiente" class="form-control" tabindex="4" required>
-                   @foreach($ambientes as $ambiente)
-                     <option value="{{ $ambiente->id }}" {{ $ambiente->id == $ambienteHorario->id_ambiente ? 'selected' : '' }}>{{ $ambiente->tipoDeAmbiente }}</option>
-                    @endforeach
-            </select>
-          <div id="ambienteError" class="text-danger"></div>
-       </div>
-            </div>
-        </div>
+                    <label for="id_tipoAmbiente" class="form-label">Tipo de Ambiente</label>
+                    <select id="id_tipoAmbiente" name="id_tipoAmbiente" class="form-control" tabindex="4" required>
+                        @foreach($tipoambientes as $tipoAmbiente)
+                            <option value="{{ $tipoAmbiente->id }}" {{ $tipoAmbiente->id == $ambienteHorario->ambiente->id_tipoAmbiente ? 'selected' : '' }}>{{ $tipoAmbiente->nombre }}</option>
+                        @endforeach
+                    </select>
+                    <div id="tipoAmbienteError" class="text-danger"></div>
+                </div>
+                
         
         <div class="mb-3">
             <a href="{{ route('ambiente_horarios.index') }}" class="btn btn-secondary" tabindex="5">Cancelar</a>
@@ -72,28 +71,26 @@
             $('#horarioForm').submit(function(event) {
                 event.preventDefault();
 
-                // Realizar la solicitud AJAX para enviar el formulario
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('action'),
                     data: $(this).serialize(),
                     success: function(response) {
-                        // Mostrar el mensaje de éxito
+                        
                         Swal.fire({
-                            title: 'Actualización exitosa!',
+                            title: 'Actualizacion exitosa!',
                             text: 'Los cambios se han guardado correctamente.',
                             icon: 'success',
-                            timer: 1500, // Duración en milisegundos (3 segundos)
+                            timer: 1500, 
                             timerProgressBar: true,
                             showConfirmButton: false
                         }).then(() => {
-                            // Redireccionar a la página de inicio después de cerrar la alerta
+                            
                             window.location.href = "{{ route('ambiente_horarios.index') }}";
                         });
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseText); // Mostrar error en la consola para depuración
-                        // Manejar el error de acuerdo a tus necesidades
+                        console.log(xhr.responseText); 
                     }
                 });
             });

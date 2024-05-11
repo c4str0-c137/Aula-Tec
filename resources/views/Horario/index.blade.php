@@ -95,6 +95,7 @@
                         <th>ID</th>
                         <th>Departamento</th>
                         <th>Ambiente</th>
+                        <th>Numero de aula</th>
                         <th>Día</th>
                         <th>Horario Reserva</th>
                         <th>Estado</th>
@@ -106,9 +107,11 @@
                         <tr>
                             <td>{{ $ambienteHorario->id }}</td>
                             <td>{{ $ambienteHorario->ambiente->departamento }}</td>
-                            <td>{{ $ambienteHorario->ambiente->tipoDeAmbiente }}</td>
+                            <td>{{ $ambienteHorario->ambiente->tipoAmbiente->nombre}}</td>
+                            <td>{{ $ambienteHorario->ambiente->numeroaula }}</td>
                             <td>{{ $ambienteHorario->dia->nombre}}</td>
                             <td>{{ $ambienteHorario->horario->horaini }}</td>
+                           
                             <td>{{ $ambienteHorario->estado_horario->estado}}</td>
                             <td>
                                 <form action="{{ route ('Horario.destroy', $ambienteHorario->id)}}" method="POST">

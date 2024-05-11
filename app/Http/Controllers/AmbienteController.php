@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ambiente;
 use App\Models\Ubicacion;
+use App\Models\TipoAmbiente;
 use Illuminate\Support\Facades\Auth;
 
 class AmbienteController extends Controller
@@ -29,10 +30,13 @@ class AmbienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $ubicaciones = Ubicacion::all();
-        return view('Ambiente.create', compact('ubicaciones',$ubicaciones));
-    }
+{
+    $ubicaciones = Ubicacion::all();
+    $tipoambientes = TipoAmbiente::all();
+    return view('Ambiente.create', compact('ubicaciones', 'tipoambientes'));
+}
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,15 +49,18 @@ class AmbienteController extends Controller
     $request->validate([
         'departamento' => 'required',
         'capacidad' => 'required|numeric',
-        'tipo' => 'required',
+        'tipoAmbiente' => 'required',
         'ubicacion' => 'required',
+        'numeroaula' =>'required'
     ]);
 
     $ambiente = new Ambiente();
     $ambiente->departamento = $request->input('departamento');
     $ambiente->capacidad = $request->input('capacidad');
-    $ambiente->TipoDeAmbiente = $request->input('tipo');
+    $ambiente->id_tipoAmbiente = $request->get('tipoAmbiente');
     $ambiente->id_ubicacion = $request->get('ubicacion');
+    $ambiente->numeroaula = $request->input('numeroaula');
+    
 
     $ambiente->save();
 
@@ -85,12 +92,18 @@ class AmbienteController extends Controller
     //     return view('Ambiente.edit')->with('Ambiente',$ambiente);
     // }
 
+   
+
     public function edit($id)
     {
-        $ambiente = Ambiente::find($id);
+        $ambiente = Ambiente::with('tipoAmbiente', 'ubicacion')->find($id);
         $ubicaciones = Ubicacion::all();
-        return view('Ambiente.edit')->with(['Ambiente' => $ambiente, 'ubicaciones' => $ubicaciones]);
+        $tipoambientes = TipoAmbiente::all(); // Agregar esta línea
+     
+        return view('Ambiente.edit')->with(['Ambiente' => $ambiente, 'ubicaciones' => $ubicaciones, 'tipoambientes' => $tipoambientes]); 
     }
+    
+    
 
     
     
@@ -115,8 +128,9 @@ class AmbienteController extends Controller
 
         $ambiente->departamento = $request->get('departamento');
         $ambiente->capacidad = $request->get('capacidad');
-        $ambiente->TipoDeAmbiente = $request->get('tipo');
+        $ambiente->id_tipoAmbiente = $request->get('tipoAmbiente');
         $ambiente->id_ubicacion= $request->get('ubicacion');
+        $ambiente->numeroaula = $request->get('numeroaula');
     
         $ambiente->save();
     

@@ -31,4 +31,8 @@ class Reserva extends Model
     {
         return $this->belongsTo(Horario::class, 'id_horario');
     }
+    public function tipoAmbiente()
+    {
+        return $this->belongsTo(TipoAmbiente::class, 'id_tipoAmbiente');
+    }
 }

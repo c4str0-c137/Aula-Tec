@@ -18,6 +18,8 @@
                     <th scope="col">Tipo de ambiente</th>
                     <!-- <th scope="col">Estado</th> -->
                     <th scope="col">Ubicacion</th>
+                    <th scope="col">Numero de aula</th>
+
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -27,8 +29,12 @@
                         <td>{{$ambiente->id}}</td>
                         <td>{{$ambiente->departamento}}</td>
                         <td>{{$ambiente->capacidad}}</td>
-                        <td>{{$ambiente->tipoDeAmbiente}}</td>
-                        <td>{{ $ambiente->ubicacion->nombre }}</td>
+                        
+                        <td>{{ $ambiente->tipoAmbiente->nombre ?? 'N/A' }}</td>
+                        <td>{{ $ambiente->ubicacion->nombre}}</td>
+                        <td>{{ $ambiente->numeroaula}}</td>
+
+
                         
                         <td>
                             <form action="{{ route ('Ambiente.destroy', $ambiente->id)}}" method="POST">

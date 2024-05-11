@@ -11,6 +11,7 @@ use App\Models\Mensaje;
 use App\Models\Ambiente;
 use App\Models\mensajeListener;
 use App\Events\mensajeEvent;
+use App\Models\TipoAmbiente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,52 +25,55 @@ class ReservaController extends Controller
      */
     
      public function index()
-{
-    // Acontecimientos necesarios
-    $acontecimientos = Acontecimiento::all();
-  
-    // Nombre del usuario actualmente autenticado
-    $userName = Auth::user()->name;
-  
-    // Consulta SQL para obtener las materias y grupos del usuario
-    $result = DB::select("
-        SELECT u.name AS nombre_usuario, 
-               GROUP_CONCAT(DISTINCT m.nombre) AS materias,
-               GROUP_CONCAT(DISTINCT g.grupo) AS grupos
-        FROM usuario_materias um 
-        JOIN users u ON um.id_user = u.id 
-        JOIN materias m ON um.id_grupo_materia = m.id 
-        JOIN grupos g ON um.id_grupo_materia = g.id 
-        WHERE u.name = :userName 
-        GROUP BY u.name;
-    ", ['userName' => $userName]);
-  
-    // Verificar si se obtuvieron resultados
-    if (!empty($result)) {
-        $materias = explode(',', $result[0]->materias);
-        $grupos = explode(',', $result[0]->grupos);
-    } else {
-        $materias = [];
-        $grupos = [];
+    {
+        // Acontecimientos necesarios
+        $acontecimientos = Acontecimiento::all();
+    
+        // Nombre del usuario actualmente autenticado
+        $userName = Auth::user()->name;
+    
+        // Consulta SQL para obtener las materias y grupos del usuario
+        $result = DB::select("
+            SELECT u.name AS nombre_usuario, 
+                GROUP_CONCAT(DISTINCT m.nombre) AS materias,
+                GROUP_CONCAT(DISTINCT g.grupo) AS grupos
+            FROM usuario_materias um 
+            JOIN users u ON um.id_user = u.id 
+            JOIN materias m ON um.id_grupo_materia = m.id 
+            JOIN grupos g ON um.id_grupo_materia = g.id 
+            WHERE u.name = :userName 
+            GROUP BY u.name;
+        ", ['userName' => $userName]);
+    
+        // Verificar si se obtuvieron resultados
+        if (!empty($result)) {
+            $materias = explode(',', $result[0]->materias);
+            $grupos = explode(',', $result[0]->grupos);
+        } else {
+            $materias = [];
+            $grupos = [];
+        }
+        $horarios = horario::all();
+        $Ambientes = ambiente::all();
+        $tiposAmbiente = TipoAmbiente::all();
+
+        return view('Docente.reserva', compact('tiposAmbiente', 'materias', 'acontecimientos', 'grupos', 'horarios'));
     }
-    $horarios = horario::all();
-    $Ambientes = ambiente::all();
-    return view('Docente.reserva', compact('Ambientes','materias', 'acontecimientos', 'grupos','horarios'));
-}
-public function getGrupos(Request $request)
-{
-    $nombreMateria = $request->input('nombre_materia');
 
-    $idMateria = Materia::where('nombre', $nombreMateria)->value('id');
+    public function getGrupos(Request $request)
+    {
+        $nombreMateria = $request->input('nombre_materia');
 
-    $gruposMateria = Grupo_Materia::where('id_materia', $idMateria)->get();
+        $idMateria = Materia::where('nombre', $nombreMateria)->value('id');
 
-    $grupos = $gruposMateria->map(function ($grupoMateria) {
-        return $grupoMateria->grupo->grupo;
-    });
+        $gruposMateria = Grupo_Materia::where('id_materia', $idMateria)->get();
 
-    return response()->json($grupos);
-}
+        $grupos = $gruposMateria->map(function ($grupoMateria) {
+            return $grupoMateria->grupo->grupo;
+        });
+
+        return response()->json($grupos);
+    }
 
 public function guardarSolicitud(Request $request)
 {
@@ -79,6 +83,7 @@ public function guardarSolicitud(Request $request)
         'fecha' => 'required|date',
         'motivo' => 'required',
         'horario' => 'required|array',
+        'tipo_ambiente' => 'required'
     ]);
     $id_usuario = Auth::id();
     $horariosSeleccionados = $request->input('horario');
@@ -89,10 +94,20 @@ public function guardarSolicitud(Request $request)
         $reserva->id_usuario_materia = $id_usuario;
         $reserva->id_acontecimiento = $request->input('motivo');
         $reserva->id_horario = $horario;
+        $reserva->id_tipoAmbiente = $request->input('tipo_ambiente');
         $reserva->save();
     }
     $mensaje = new mensajeController();
-    $mensaje->enviarSolicitud($request);
+    $id_usuario_materia = 3; // Las relaciones para obtener ese id correcto con las materias y grupos seleccionados
+                            // Cambiar ese uno por id obtenido 
+                            /** 
+                             * Si cambias los numeros a id_usuario_materia ese seran los resultados 
+                             * 1  ->          tis - grupo 1
+                             * 2  ->          intro - grupo 2
+                             * 3  ->          tis - grupo 3
+                             * 4  ->          intro - grupo 4
+                             */
+    $mensaje->enviarSolicitud($request,$id_usuario_materia);
     return redirect()->route('docente');
 }
 

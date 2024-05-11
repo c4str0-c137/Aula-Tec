@@ -31,7 +31,13 @@ class CreateReservasTable extends Migration
         $table->foreign('id_horario')
             ->references('id')
             ->on('horarios');
+        
+        $table->unsignedBigInteger('id_tipoAmbiente');
+        $table->foreign('id_tipoAmbiente')
+            ->references('id')
+            ->on('tipo_ambientes');
         $table->timestamps();
+
         });
         
     }

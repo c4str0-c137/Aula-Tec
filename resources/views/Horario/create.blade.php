@@ -47,11 +47,11 @@
 
                 
                 <div class="mb-3">
-                    <label for="id_ambiente" class="form-label">Ambiente</label>
+                    <label for="id_ambiente" class="form-label">Tipo de Ambiente</label>
                     <select id="id_ambiente" name="id_ambiente" class="form-control" tabindex="4" required>
                         <option value="">Seleccione un ambiente</option>
                         @foreach($ambientes as $ambiente)
-                            <option value="{{ $ambiente->id }}">{{ $ambiente->tipoDeAmbiente }}</option>
+                            <option value="{{ $ambiente->id }}">{{ $ambiente->tipoAmbiente->nombre }}</option>
                         @endforeach
                     </select>
                     <div id="ambienteError" class="text-danger"></div>
