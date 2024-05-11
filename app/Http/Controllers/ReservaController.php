@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Acontecimiento;
 use App\Models\Grupo_Materia;
-use App\Models\horario;
+use App\Models\Horario;
 use App\Models\Materia;
 use App\Models\Reserva;
 use App\Models\Mensaje;
