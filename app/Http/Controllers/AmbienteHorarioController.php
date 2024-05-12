@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmbienteHorario;
-use App\Models\Dia;
+use App\Models\dia;
 use App\Models\EstadoHorario;
 use Illuminate\Http\Request;
 use App\Models\Horario;
