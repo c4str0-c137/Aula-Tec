@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         ])->assignRole('Administrador');
         User::create([
             'name' => 'Corina Justina Flores Villaroel',
-            'email' => 'docente@gmail.com',
+            'email' => 'devg57963@gmail.com',
             'password' => Hash::make('123456789'),
             'id_rol' => 2,
         ])->assignRole('Docente');
