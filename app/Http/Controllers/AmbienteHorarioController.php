@@ -35,84 +35,71 @@ class AmbienteHorarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-{
-    // Recuperar los datos del seeder para los estados
-    $estados = EstadoHorario::all();
-    $dias = dia::all();
-    $horarios = Horario::all();
-    return view('Horario.create', compact('estados', 'dias', 'horarios'));
-}
+    {
+        // Recuperar los datos del seeder para los estados
+        $estados = EstadoHorario::all();
+        $dias = dia::all();
+        $horarios = Horario::all();
+        return view('Horario.create', compact('estados', 'dias', 'horarios'));
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   
-
-     
-
-     public function store(Request $request)
-{
-    $request->validate([
-        'id_ambiente' => 'required',
-        'id_estado_horario' => 'required',
-        'id_dia' => 'required',
-        'id_horario' => 'required|array',
-    ]);
-
-    // Obtener el primer valor seleccionado para el campo id_dia
-    $id_dia = $request->id_dia;
-
-    // Validar si ya existe un registro con el mismo día y horario
-    $existingRecord = AmbienteHorario::where('id_dia', $id_dia)
-                                      ->whereIn('id_horario', $request->id_horario)
-                                      ->exists();
-
-    if ($existingRecord) {
-        return response()->json(['error' => ''], 422);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_ambiente' => 'required',
+            'id_estado_horario' => 'required',
+            'id_dia' => 'required',
+            'id_horario' => 'required|array',
+        ]);
+        // Obtener el primer valor seleccionado para el campo id_dia
+        $id_dia = $request->id_dia;
+        // Validar si ya existe un registro con el mismo día y horario
+        $existingRecord = AmbienteHorario::where('id_dia', $id_dia)
+                                        ->whereIn('id_horario', $request->id_horario)
+                                        ->exists();
+        if ($existingRecord) {
+            return response()->json(['error' => ''], 422);
+        }
+        // Guardar el registro en la base de datos
+        foreach ($request->id_horario as $id_horario) {
+            $ambienteHorario = new AmbienteHorario();
+            // Asignar los valores del formulario a los campos del modelo
+            $ambienteHorario->id_ambiente = $request->id_ambiente;
+            $ambienteHorario->id_horario = $id_horario;
+            $ambienteHorario->id_dia = $id_dia;
+            $ambienteHorario->id_estado_horario = $request->id_estado_horario;
+            $ambienteHorario->save();
+        }
+        return response()->json(['success' => 'Los ambientes han sido registrados correctamente.'], 200);
     }
-
-    // Guardar el registro en la base de datos
-    foreach ($request->id_horario as $id_horario) {
-        $ambienteHorario = new AmbienteHorario();
-    
-        // Asignar los valores del formulario a los campos del modelo
-        $ambienteHorario->id_ambiente = $request->id_ambiente;
-        $ambienteHorario->id_horario = $id_horario;
-        $ambienteHorario->id_dia = $id_dia;
-        $ambienteHorario->id_estado_horario = $request->id_estado_horario;
-        $ambienteHorario->save();
-    }
-
-    return response()->json(['success' => 'Los ambientes han sido registrados correctamente.'], 200);
-}
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\ambiente_horario  $ambiente_horario
      * @return \Illuminate\Http\Response
      */
+    public function edit($id)
+    {
+        $ambienteHorario = AmbienteHorario::findOrFail($id);
+        $ambientes = Ambiente::all(); 
+        $horarios = Horario::all();
+        $dias = Dia::all();
+        $estados = EstadoHorario::all();
+        $tipoambientes = TipoAmbiente::all(); 
 
-     public function edit($id)
-     {
-         $ambienteHorario = AmbienteHorario::findOrFail($id);
-         $ambientes = Ambiente::all(); 
-         $horarios = Horario::all();
-         $dias = Dia::all();
-         $estados = EstadoHorario::all();
-         $tipoambientes = TipoAmbiente::all(); 
-     
-         return view('Horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados', 'tipoambientes')); 
-     }
-      
+        return view('Horario.edit', compact('ambienteHorario', 'ambientes', 'horarios', 'dias', 'estados', 'tipoambientes')); 
+    } 
 /**
  * Remove the specified resource from storage.
  *
  * @param  int  $id
  * @return \Illuminate\Http\Response
  */
-
     public function destroy($id)
     {
         $ambienteHorario = AmbienteHorario::find($id);

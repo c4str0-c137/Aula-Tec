@@ -24,14 +24,12 @@ class ReservaController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-     public function index()
+    public function index()
     {
         // Acontecimientos necesarios
         $acontecimientos = Acontecimiento::all();
-    
         // Nombre del usuario actualmente autenticado
         $userName = Auth::user()->id;
-
         // Consulta SQL para obtener las materias del usuario
         $materias = DB::select("
         SELECT DISTINCT
@@ -50,51 +48,25 @@ class ReservaController extends Controller
             WHERE 
                 u.id = :userName;
         ", ['userName' => $userName]);
-
-        // Consulta SQL para obtener los grupos del usuario
-        $grupos = DB::select("
-            SELECT 
-                u.id AS id_usuario,
-                u.name AS nombre_usuario,
-                g.id AS id_grupo,
-                g.grupo AS nombre_grupo
-            FROM 
-                usuario_materias um  
-            JOIN 
-                users u ON um.id_user = u.id  
-            JOIN 
-                grupo_materias mg ON um.id_grupo_materia = mg.id  
-            JOIN 
-                grupos g ON mg.id_grupo = g.id  
-            WHERE 
-                u.id = :userName;
-        ", ['userName' => $userName]);
-
         $horarios = horario::all();
         $Ambientes = ambiente::all();
         $tiposAmbiente = TipoAmbiente::all();
-
         return view('Docente.reserva', compact('tiposAmbiente', 'materias', 'acontecimientos', 'horarios'));
     }
 
-    public function getGrupos(Request $request)
+public function getGrupos(Request $request)
 {
     $nombreMateria = $request->input('nombre_materia');
-
     $idMateria = Materia::where('nombre', $nombreMateria)->value('id');
-
     $gruposMateria = Grupo_Materia::where('id_materia', $idMateria)->get();
-
     $grupos = $gruposMateria->map(function ($grupoMateria) {
         return [
             'id' => $grupoMateria->grupo->id,
             'nombre' => $grupoMateria->grupo->grupo
         ];
     });
-
     return response()->json($grupos);
 }
-
 
 public function guardarSolicitud(Request $request)
 {

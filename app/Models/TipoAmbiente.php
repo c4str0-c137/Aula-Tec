@@ -14,7 +14,7 @@ class TipoAmbiente extends Model
     protected $fillable = ['nombre'];
 
     public function ambiente(){
-        return $this->hasMany(Ambiente::class, 'id_tipoAmbiente');
+        return $this->hasMany(Ambiente::class, 'id_ambiente');
     }
     public function reserva(){
         return $this->hasMany(Reserva::class, 'id_reserva');
