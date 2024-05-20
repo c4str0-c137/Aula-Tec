@@ -71,7 +71,8 @@ class mensajeController extends Controller
                 'tipo_ambientes.nombre as tipo_ambiente'
             )
             ->orderByRaw('CASE WHEN reservas.id_acontecimiento = 5 THEN 1 ELSE 0 END ASC') // Mover id_acontecimiento 5 al final
-            ->orderBy('reservas.created_at', 'asc')  // Ordenar por created_at en orden descendente
+            ->orderBy('reservas.fecha_reserva', 'asc')  // Ordenar por created_at en orden descendente
+            ->orderBy('horarios.horaini', 'asc')
             ->get();
         return view('mensaje.notifications', compact('reservas'));
     }
@@ -100,7 +101,8 @@ class mensajeController extends Controller
                 'tipo_ambientes.nombre as tipo_ambiente'
             )
             ->orderByRaw('CASE WHEN reservas.id_acontecimiento = 5 THEN 1 ELSE 0 END ASC') // Mover id_acontecimiento 5 al final
-            ->orderBy('reservas.created_at', 'asc')  // Ordenar por created_at en orden descendente
+            ->orderBy('reservas.fecha_reserva', 'asc')  // Ordenar por created_at en orden descendente
+            ->orderBy('horarios.horaini', 'asc')
             ->get();
         return view('mensaje.detalle', compact('reservas','id'));
     }

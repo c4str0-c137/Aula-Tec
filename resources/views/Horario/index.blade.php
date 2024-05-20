@@ -45,8 +45,8 @@
                                 <span class="dropdown-item"><i class="bi-house">Todas las Aulas</i></span>
                             </li>
                             @foreach($ambientes as $ambiente)
-                                <li data-val="{{ $ambiente->tipoDeAmbiente }}">
-                                    <span class="dropdown-item"><i class="bi-house">{{ $ambiente->tipoDeAmbiente }}</i></span>
+                                <li data-val="{{ $ambiente->numeroaula }}">
+                                    <span class="dropdown-item"><i class="bi-house">{{ $ambiente->numeroaula }}</i></span>
                                 </li>
                             @endforeach
                         </ul>
@@ -177,7 +177,7 @@
                 var selectedText = $(this).text();
                 $(this).closest('.btn-group-vertical').find('.btn-outline-success').html(
                     '<i class="bi-house">' + selectedText + ' </i><span class="caret"></span>');
-                table.column(2).search(selectedValue).draw();
+                table.column(3).search(selectedValue).draw();
             });
 
             $('#dias_filter .dropdown-item').on('click', function() {
@@ -185,7 +185,7 @@
                 var selectedText = $(this).text();
                 $(this).closest('.btn-group-vertical').find('.btn-outline-info').html(
                     '<i class="bi-calendar">' + selectedText + ' </i><span class="caret"></span>');
-                table.column(3).search(selectedValue).draw();
+                table.column(4).search(selectedValue).draw();
             });
 
             $('#horario_filter .dropdown-item').on('click', function() {
@@ -193,7 +193,7 @@
                 var selectedText = $(this).text();
                 $(this).closest('.btn-group-vertical').find('.btn-outline-primary').html(
                     '<i class="bi-clock">' + selectedText + ' <span class="caret"></span>');
-                table.column(4).search(selectedValue).draw();
+                table.column(5).search(selectedValue).draw();
             });
         });
     </script>

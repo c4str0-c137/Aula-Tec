@@ -18,12 +18,14 @@
     <div style="overflow-x: auto;">
         <table id="notificaciones" class="table table-striped table-bordered">
             <thead class="bg-primary text-white">
-                <tr>
+            <tr>
                     <th>ID</th>
                     <th>Docente</th>
                     <th>Materia</th>
                     <th>Motivo</th>
                     <th>Detalle</th>
+                    <th style="display: none;">Fecha</th>
+                    <th style="display: none;">Horario</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +36,10 @@
                     <td>{{  $reserva->materia }}</td>
                     <td>{{  $reserva->acontecimiento }}</td>
                     <td>
-                    <a href="{{route('mensaje.unico', ['id' => $reserva->id]) }}" class="btn btn-outline-primary">Mas Detalles</a>                    </td>
+                        <a href="{{route('mensaje.unico', ['id' => $reserva->id]) }}" class="btn btn-outline-primary">Mas Detalles</a>                    
+                    </td>
+                    <td style="display: none;">{{ $reserva->fecha_reserva }}</td>
+                    <td style="display: none;">{{ $reserva->horario }}</td>
                 </tr>
                 @empty
                 No tienes notificaciones
@@ -83,6 +88,7 @@
         });
         function sendMarkRequest(id = null) {
     return $.ajax("{{ route('markNotification') }}", {
+        
         method: 'POST',
         data: {
             _token: "{{ csrf_token() }}",
