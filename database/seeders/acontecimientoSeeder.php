@@ -26,5 +26,8 @@ class acontecimientoSeeder extends Seeder
         Acontecimiento::create([
             'tipo' => "2da Instancia"
         ]);
+        Acontecimiento::create([
+            'tipo' => "Tesis"
+        ]);
     }
 }
