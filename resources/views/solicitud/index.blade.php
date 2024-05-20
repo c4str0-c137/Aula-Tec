@@ -1,50 +1,31 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-@extends('adminlte::page')
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de reserva</title>
+</head>
+<body>
+    @if (!empty($ambientes_disponibles))
+        <p>Hola {{ $reserva->docente }},</p>
+        
+        <p>Tu reserva ha sido confirmada con éxito. Aquí está la información de la reserva:</p>
 
-@section('title', 'Listado de Reservas')
+        <ul>
+            <li>Número de reserva: {{ $reserva->id }}</li>
+            <li>Fecha y hora: {{ $reserva->fecha_reserva }}</li>
+            <li>Grupo: {{ $reserva->grupo }}</li>
+            <li>Materia: {{ $reserva->materia }}</li>
+            <li>Motivo: {{ $reserva->acontecimiento }}</li>
+            <li>Horario: {{ $reserva->horario }}</li>
+            <li>Tipo Ambiente: {{ $reserva->tipo_ambiente }}</li>
+            <li>Ambiente asignado: {{ $ambientes_disponibles }}</li>
+            <!-- Agrega más detalles de la reserva según sea necesario -->
+        </ul>
 
-@section('content_header')
-    <h1>Listado de reservas</h1>
-@stop
-
-@section('content')
-    <a href="{{ route('Horario.create') }}" class="btn btn-primary mb-3">CREAR</a>
-    @if(Auth::check() && Auth::user()->id_rol === 1)
-        <div class="container-fluid">
-    <div class="container">
-        <div style="overflow-x: auto;">
-            <table id="ambienteHorariosTable" class="table table-striped table-bordered">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <th>ID</th>
-                        <th>Solicitante</th>
-                        <th>Motivo</th>
-                        <th>Fecha</th>
-                        <th>Horario</th>
-                        <th>Grupo</th>
-                        <th>Materia</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($reservas as $reserva)
-                    <tr>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                        <td>{{ $reserva  }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-@endif
-@stop
-
-@section('css')
-<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-@stop
+        <p>¡Gracias por usar nuestro sistema de reservas!</p>
+    @else
+        <p>No se encontraron ambientes disponibles para realizar la reserva.</p>
+    @endif
+</body>
+</html>

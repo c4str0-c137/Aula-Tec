@@ -1,3 +1,4 @@
+{{-- Vista --}}
 @extends('adminlte::page')
 
 @section('title', 'Lista de Solicitudes')
@@ -30,22 +31,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($notificationsData as $notification)
-                            @if ($notification['id'] == $notificationId)
+                        @forelse ($reservas as $reserva)
+                            @if ($reserva->id == $id)
                                 <tr>
-                                    <td>{{ $notification['Solicitante'] }}</td>
-                                    <td>{{ $notification['Materia'] }}</td>
-                                    <td>{{ $notification['Grupo'] }}</td>
-                                    <td>{{ $notification['capacidad'] }}</td>
-                                    <td>{{ $notification['Motivo'] }}</td>
-                                    <td>{{ $notification['Horario'] }}</td>
-                                    <td>{{ $notification['Fecha'] }}</td>
-                                    <td>{{ $notification['ambiente'] }}</td>
+                                    <td>{{ $reserva->docente }}</td>
+                                    <td>{{ $reserva->materia  }}</td>
+                                    <td>{{ $reserva->grupo  }}</td>
+                                    <td>{{ $reserva->capacidad  }}</td>
+                                    <td>{{ $reserva->acontecimiento  }}</td>
+                                    <td>{{ $reserva->horario  }}</td>
+                                    <td>{{ $reserva->fecha_reserva  }}</td>
+                                    <td>{{ $reserva->tipo_ambiente  }}</td>
                                     <td>
-                                        <button class="btn btn-info assign-btn" data-capacidad="{{ $notification['capacidad'] }}">Asignar</button>
+                                        <form action="{{ route('asignarAmbiente', ['id' => $reserva->id]) }}" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="capacidad" value="{{ $reserva->capacidad }}">
+                                            <input type="hidden" name="tipo_ambiente" value="{{ $reserva->tipo_ambiente }}">
+                                            <input type="hidden" name="horario" value="{{ $reserva->horario }}">
+                                            <button type="submit" class="btn btn-info assign-btn">Asignar</button>
+                                        </form>
                                     </td>
                                 </tr>
-                                @break {{-- Rompe el bucle después de encontrar la notificación --}}
+                                @break 
                             @endif
                         @empty
                             <tr>
@@ -89,30 +96,6 @@
                 "pageLength": 3,
                 "searching": true,
                 "fixedHeader": true
-            });
-
-            // Manejo del clic en el botón "Asignar"
-            $('.assign-btn').click(function() {
-                // Obtener la capacidad desde el atributo data-capacidad del botón
-                let capacidad = $(this).data('capacidad');
-                
-                // Imprimir la capacidad en la consola
-                console.log("Capacidad:", capacidad);
-
-                // Realizar la solicitud AJAX para obtener los ambientes con la misma capacidad
-                $.ajax({
-                    url: '{{ route("buscarAmbientes") }}',
-                    method: 'POST',
-                    data: { capacidad: capacidad },
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                    success: function(response) {
-                        console.log("Ambientes con capacidad", capacidad, ":", response);
-                        // Aquí puedes manipular los datos de los ambientes obtenidos, como agregarlos a la interfaz de usuario, etc.
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error al buscar ambientes:", error);
-                    }
-                });
             });
         });
     </script>

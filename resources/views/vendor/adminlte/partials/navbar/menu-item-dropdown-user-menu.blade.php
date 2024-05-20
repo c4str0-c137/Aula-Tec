@@ -35,6 +35,7 @@
             @endforelse
             <div class="dropdown-divider"></div>
             <a href="{{ route('markAsRead') }}" class="dropdown-item dropdown-footer">Marcar todo como leido</a>
+            
         </div>
     </li>
 </ul>

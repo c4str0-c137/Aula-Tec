@@ -33,10 +33,10 @@
               </div>
 
               <div class="mb-3">
-    <label for="id_horario" class="form-label">Horario</label>
-    <div class="checkbox-grid"> <!-- Contenedor para la matriz de casillas de verificación -->
+                <label for="id_horario" class="form-label">Horario</label>
+                  <div class="checkbox-grid"> 
         @foreach($horarios as $horario)
-        <div class="form-check"> <!-- Cada casilla de verificación -->
+        <div class="form-check">
             <input class="form-check-input" type="checkbox" name="id_horario[]" id="horario{{ $horario->id }}" value="{{ $horario->id }}">
             <label class="form-check-label" for="horario{{ $horario->id }}">{{ $horario->horaini }}</label>
         </div>

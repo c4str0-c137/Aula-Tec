@@ -19,6 +19,7 @@
         <table id="notificaciones" class="table table-striped table-bordered">
             <thead class="bg-primary text-white">
                 <tr>
+                    <th>ID</th>
                     <th>Docente</th>
                     <th>Materia</th>
                     <th>Motivo</th>
@@ -26,13 +27,14 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($notificationsData as $notification)
+                @forelse ($reservas as $reserva)
                 <tr>
-                    <td>{{  $notification['Solicitante'] }}</td>
-                    <td>{{  $notification['Materia'] }}</td>
-                    <td>{{  $notification['Motivo'] }}</td>
+                    <td>{{  $reserva->id }}</td>
+                    <td>{{  $reserva->docente }}</td>
+                    <td>{{  $reserva->materia }}</td>
+                    <td>{{  $reserva->acontecimiento }}</td>
                     <td>
-                    <a href="{{ route('mensaje.unico', ['notificationId' => $notification['id']]) }}" class="btn btn-outline-primary">Mas Detalles</a>                    </td>
+                    <a href="{{route('mensaje.unico', ['id' => $reserva->id]) }}" class="btn btn-outline-primary">Mas Detalles</a>                    </td>
                 </tr>
                 @empty
                 No tienes notificaciones
@@ -73,9 +75,10 @@
                     }
                 },
                 "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "pageLength": 3,
+                "pageLength": 10,
                 "searching": true,
-                "fixedHeader": true
+                "fixedHeader": true,
+                "ordering": false
             });
         });
         function sendMarkRequest(id = null) {

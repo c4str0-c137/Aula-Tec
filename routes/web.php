@@ -71,7 +71,7 @@ Route::post('/guardar-solicitud', [ReservaController::class, 'guardarSolicitud']
 Route::middleware(['auth'])->group(function(){
     Route::resource('mensaje', mensajeController::class);
     Route::resource('reserva', ReservaController::class);
-    Route::get('/mensaje/detalle/{notificationId}', [mensajeController::class,'unico'])->name('mensaje.unico');
+    Route::get('/mensaje/detalle/{id}', [mensajeController::class,'unico'])->name('mensaje.unico');
     Route::get('/solicitud', [ReservaController::class, 'solicitud'])->name('reserva.solicitud');
 
     Route::get('markAsRead', function(){
@@ -85,5 +85,7 @@ Route::get('/mensaje/create', [mensajeController::class, 'create'])->name('mensa
 
 Route::put('/Horario/{id}', [AmbienteHorarioController::class, 'update'])->name('Horario.update')->middleware('auth');
 
-Route::post('/buscar-ambientes', [mensajeController::class, 'buscarAmbientes'])->name('buscarAmbientes');
+Route::get('/asignar-ambiente/{id}', [mensajeController::class, 'asignarAmbiente'])->name('asignarAmbiente')->middleware('auth');
+Route::post('/buscar-ambientes', [mensajeController::class, 'buscarAmbientes'])->name('buscarAmbientes')->middleware('auth');
+Route::post('/confirmar-reserva/{id}', [mensajeController::class, 'confirmarReserva'])->name('confirmarReserva')->middleware('auth');
 

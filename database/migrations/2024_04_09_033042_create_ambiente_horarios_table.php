@@ -15,10 +15,6 @@ class CreateAmbienteHorariosTable extends Migration
     {
         Schema::create('ambiente_horarios', function (Blueprint $table) {
             $table->id();
-        });
-        Schema::table(
-            'ambiente_horarios',
-            function (Blueprint $table) {
                 $table->unsignedBigInteger('id_ambiente')->nullable();
                 $table->foreign('id_ambiente')
                     ->references('id')
@@ -35,9 +31,9 @@ class CreateAmbienteHorariosTable extends Migration
                 $table->foreign('id_estado_horario')
                         ->references('id')
                         ->on('estado_horarios');
-            }
-
-        );
+        $table->timestamps();
+         });        
+       
     }
 
     /**
