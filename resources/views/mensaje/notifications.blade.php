@@ -25,8 +25,7 @@
                     <th>Motivo</th>
                     <th>Detalle</th>
                     <th style="display: none;">Fecha</th>
-                    <th style="display: none;">Horario</th>
-                </tr>
+                    </tr>
             </thead>
             <tbody>
                 @forelse ($reservas as $reserva)
@@ -39,7 +38,7 @@
                         <a href="{{route('mensaje.unico', ['id' => $reserva->id]) }}" class="btn btn-outline-primary">Mas Detalles</a>                    
                     </td>
                     <td style="display: none;">{{ $reserva->fecha_reserva }}</td>
-                    <td style="display: none;">{{ $reserva->horario }}</td>
+                   
                 </tr>
                 @empty
                 No tienes notificaciones

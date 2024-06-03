@@ -20,7 +20,7 @@ class DocenteMiddleware
     if (Auth::check() && Auth::user()->id_rol == 2) {
         return $next($request);
     }
-    return abort(403, 'Acceso no autorizado.');
+    return redirect()->route('login')->withErrors(['message' => 'Acceso no autorizado.']);    
     }
 
 }

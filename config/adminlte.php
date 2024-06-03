@@ -318,7 +318,7 @@ return [
         [
             'text' => 'Registrar ambientes',
             'url' => 'Ambiente',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => '	fas fa-suitcase',
             'can' =>'Ambiente.index'
             // 'label' => 'CRUD',
             // 'label_color' => 'warning',
@@ -326,7 +326,7 @@ return [
         [
             'text' => 'Registrar horarios',
             'url' => 'Horario',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => '	far fa-clock',
             'can' =>'Horario.index'
             // 'label' => 'CRUD',
             // 'label_color' => 'warning',
@@ -340,13 +340,33 @@ return [
             // 'label_color' => 'warning',
         ],
         [
+            'text' => 'Configuracion',
+            'route' => 'Configuracion.index',
+            'url' => 'Configuracion',
+            'icon' => 'fas fa-cog',
+            'can' =>'Horario.index'
+            
+            
+            
+            
+            // 'label' => 'CRUD',
+            // 'label_color' => 'warning',
+        ],
+        [
             'text' => 'Horarios Y Ambientes',
             'url' => 'Docente',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'fa-regular fa-clock',
             'can' =>'Docente.docente'
 
         ],
         [
+            'text' => 'Pendientes',
+            'route' => 'reservas.pendientes',
+            'icon' => 'far fa-fw fa-envelope',
+            'can' =>'Horario.index'
+            // 'label' => 'CRUD',
+            // 'label_color' => 'warning',
+        ], [
             'text' => 'Solicitar Reserva',
             'route' => 'solicitud_reserva',
             'icon' => 'far fa-fw fa-envelope',
@@ -354,6 +374,7 @@ return [
             // 'label' => 'CRUD',
             // 'label_color' => 'warning',
         ],
+        
         // ['header' => 'account_settings'],
         // [
         //     'text' => 'profile',

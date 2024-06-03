@@ -22,5 +22,9 @@ class EstadoHorarios extends Seeder
         EstadoHorario::create([
             'estado' => 'Inactivo',
         ]);
+        EstadoHorario::create([
+            'estado' => 'Pendiente',
+        ]);
+
     }
 }

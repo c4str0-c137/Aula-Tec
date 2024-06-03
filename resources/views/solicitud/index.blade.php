@@ -6,7 +6,7 @@
     <title>Confirmación de reserva</title>
 </head>
 <body>
-    @if (!empty($ambientes_disponibles))
+    @if (!empty($ambientes))
         <p>Hola {{ $reserva->docente }},</p>
         
         <p>Tu reserva ha sido confirmada con éxito. Aquí está la información de la reserva:</p>
@@ -19,9 +19,19 @@
             <li>Motivo: {{ $reserva->acontecimiento }}</li>
             <li>Horario: {{ $reserva->horario }}</li>
             <li>Tipo Ambiente: {{ $reserva->tipo_ambiente }}</li>
-            <li>Ambiente asignado: {{ $ambientes_disponibles }}</li>
-            <!-- Agrega más detalles de la reserva según sea necesario -->
+            @foreach($ambientes as $ambiente)
+            <li>Ambiente Disponible: {{ $ambiente }}</li>
+            @endforeach
         </ul>
+        
+        <p>
+            <a href="{{ route('docente.unica', ['reserva' => $reserva, 'ambientes' => $ambientes]) }}" class="btn btn-outlineprimary">
+                Más Detalles
+            </a>
+        </p>
+
+
+
 
         <p>¡Gracias por usar nuestro sistema de reservas!</p>
     @else

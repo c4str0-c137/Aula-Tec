@@ -36,6 +36,7 @@ class CreateReservasTable extends Migration
         $table->foreign('id_tipoAmbiente')
             ->references('id')
             ->on('tipo_ambientes');
+        $table->string('estado')->default('nueva');
         $table->timestamps();
 
         });

@@ -11,6 +11,23 @@
         <div class="card-body">
             <form action="{{ route('guardar_solicitud') }}" method="POST" id="solicitudForm">
                 @csrf
+                <div class="info-box-container d-none">
+                    <div class="info-box">
+                        <div class="info-box-content">
+                            <p class="info-box-text">Periodos: <span id="periodosCantidad">{{ $cantidadPeriodos->periodos }}</span></p>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-box-content">
+                            <p class="info-box-text">Fecha Inicio: <span id="fechaInicio">{{ $cantidadPeriodos->fecha_inicio }}</span></p>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-box-content">
+                            <p class="info-box-text">Fecha Fin: <span id="fechaFin">{{ $cantidadPeriodos->fecha_fin }}</span></p>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="usuario" class="form-label">Usuario</label>
@@ -30,6 +47,7 @@
                         </select>
                     </div>
                 </div>
+                
                 <div class="mb-3 row">
                     <div class="col position-relative">
                         <label for="materia" class="form-label">Materias</label>
@@ -51,7 +69,6 @@
                         <div id="grupoError" class="text-danger"></div>
                     </div>
                 </div>
-        
                 <div class="mb-3 row">
                     <div class="col position-relative">
                         <label for="capacidad" class="form-label">Capacidad</label>
@@ -73,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                
+        
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="horario" class="form-label">Horario</label>
@@ -85,7 +102,7 @@
                                 @endif
                                 <div class="col">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="horario[]" id="horario{{ $horario->id }}" value="{{ $horario->id }}">
+                                        <input class="form-check-input horario-checkbox" type="checkbox" name="horario[]" id="horario{{ $horario->id }}" value="{{ $horario->id }}">
                                         <label class="form-check-label" for="horario{{ $horario->id }}">{{ $horario->horaini }}</label>
                                     </div>
                                 </div>
@@ -114,7 +131,10 @@
                     </div>
                 </div>
                 <!-- Resto del formulario -->
-                <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                <button type="submit" id="enviarSolicitud" class="btn btn-primary">Enviar Solicitud</button>
+                <div id="fueraDeRangoError" class="alert alert-danger mt-3" style="display: none;">
+                    Usted está fuera del rango para poder enviar una solicitud. Por favor, revise las fechas.
+                </div>
             </form>
         </div>
     </div>
@@ -122,6 +142,7 @@
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('estilos/reserva.css') }}">
+
 @endpush
 
 @push('js')
@@ -129,6 +150,32 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     $(document).ready(function() {
+
+        var periodosCantidad = parseInt($('#periodosCantidad').text());
+        var fechaInicio = new Date($('#fechaInicio').text());
+        var fechaFin = new Date($('#fechaFin').text());
+        var today = new Date();
+
+        function controlarHorarios() {
+            var tipoAmbiente = $('#tipo_ambiente').find('option:selected').text();
+            var selectedHorarios = $('input[name="horario[]"]:checked').length;
+
+            if ((tipoAmbiente === 'Aula' || tipoAmbiente === 'Auditorio') && selectedHorarios >= periodosCantidad) {
+                $('input[name="horario[]"]:not(:checked)').prop('disabled', true); // Deshabilitar los no seleccionados
+            } else {
+                $('input[name="horario[]"]:not(:checked)').prop('disabled', false); // Habilitar todos
+            }
+        }
+
+        $('input[name="horario[]"]').change(function() {
+            controlarHorarios();
+        });
+
+        $('#tipo_ambiente').change(function() {
+            $('input[name="horario[]"]').prop('checked', false).prop('disabled', false); // Desmarcar y habilitar todos
+            controlarHorarios();
+        });
+
         $('#materia').change(function() {
             var materiaNombre = $(this).val();
             if (materiaNombre) {
@@ -160,17 +207,15 @@
                 my: "right top",
                 at: "right bottom"
             },
-            prevText: 'Anterior',
-            nextText: 'Siguiente',
-            defaultDate: new Date(),
-            beforeShowDay: function(date) {
-                var today = new Date();
-                if (date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()) {
-                    return [true, 'current-day', 'Día actual'];
-                }
-                return [true, '', ''];
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            closeText: 'Cerrar',
+            onSelect: function(dateText, inst) {
+                $(this).val(dateText);
+                $('#fechaError').hide();
             },
-            onSelect: function(selectedDate) {
+            onClose: function() {
                 $('#fechaError').fadeOut('slow');
             },
             monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -186,6 +231,7 @@
 
         $('#solicitudForm').submit(function(e) {
             e.preventDefault();
+
             var materiaSeleccionada = $('#materia').val();
             if (!materiaSeleccionada) {
                 $('#materiaError').text('Por favor, seleccione una materia').show();
@@ -194,6 +240,7 @@
                 }, 3000);
                 return;
             }
+
             var capacidad = $('#capacidad').val();
             if (!(/^\d+$/.test(capacidad))) {
                 $('#capacidadError').text('Ingrese un valor entero entre 1 y 200').show();
@@ -210,6 +257,7 @@
                 }, 3000);
                 return;
             }
+
             var motivoSeleccionado = $('#motivo').val();
             if (!motivoSeleccionado) {
                 $('#acontecimientoError').text('Seleccione el motivo para su reserva').show();
@@ -218,6 +266,7 @@
                 }, 3000);
                 return;
             }
+
             var horarioSeleccionado = $("input[name='horario[]']:checked").length;
             if (horarioSeleccionado === 0) {
                 $('#horarioError').text('Por favor Seleccione un al menos horario').show();
@@ -226,6 +275,7 @@
                 }, 3000);
                 return;
             }
+
             var fechaSeleccionada = $('#fecha').val();
             if (!fechaSeleccionada) {
                 $('#fechaError').text('Por favor, Elija una fecha').show();
@@ -234,6 +284,7 @@
                 }, 3000);
                 return;
             }
+
             $.ajax({
                 url: $(this).attr('action'),
                 method: $(this).attr('method'),
@@ -254,7 +305,13 @@
                 }
             });
         });
+        if (today < fechaInicio || today > fechaFin) {
+            $('#enviarSolicitud').prop('disabled', true);
+            $('#fueraDeRangoError').show();
+        } else {
+            $('#enviarSolicitud').prop('disabled', false);
+            $('#fueraDeRangoError').hide();
+        }
     });
-
 </script>
 @endpush

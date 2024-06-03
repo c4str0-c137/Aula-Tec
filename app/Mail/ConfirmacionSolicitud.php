@@ -13,12 +13,12 @@ class ConfirmacionSolicitud extends Mailable
     use Queueable, SerializesModels;
 
     public $reserva;
-    public $ambientes_disponibles;
+    public $ambientes;
 
-    public function __construct($reserva,$ambientes_disponibles)
+    public function __construct($reserva,$ambientes)
     {
         $this->reserva = $reserva;
-        $this->ambientes_disponibles = $ambientes_disponibles;
+        $this->ambientes = $ambientes;
     }
 
     public function build()
