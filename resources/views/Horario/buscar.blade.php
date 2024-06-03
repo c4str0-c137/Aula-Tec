@@ -8,7 +8,7 @@
 
 @section('content')
     @if(session('message'))
-        <div class="alert alert-success">
+        <div class="custom-success-message">
             {{ session('message') }}
         </div>
     @endif
@@ -149,6 +149,24 @@
                     .catch(error => console.error('Error:', error));
                 }
             }
+            $('#solicitudForm').submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                method: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    // Mostrar SweetAlert2 solo si hay información en la sesión
+                    if ("{{ session('message') }}") {
+                        showConfirmationMessage();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores si es necesario
+                }
+            });
+        });
         });
     </script>
 @stop

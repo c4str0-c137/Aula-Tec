@@ -294,7 +294,7 @@
                         title: 'Solicitud enviada exitosamente',
                         text: '¡Gracias por enviar tu solicitud!',
                         icon: 'success',
-                        timer: 1500,
+                        timer: 10500,
                         timerProgressBar: true,
                         showConfirmButton: false
                     }).then((result) => {

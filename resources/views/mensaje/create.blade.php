@@ -5,7 +5,7 @@
 @section('content_header')
     <h1>Enviar Notificaciones</h1>
     @if(session('message'))
-        <div class="alert alert-success">
+        <div class="custom-success-message">
             {{ session('message') }}
         </div>
     @endif

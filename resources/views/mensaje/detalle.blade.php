@@ -8,11 +8,6 @@
 @stop
 
 @section('content')
-    @if(session('message'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-    @endif
     @if (auth()->user())
         <div class="container">
             <div style="overflow-x: auto;">
@@ -43,7 +38,7 @@
                                     <td>{{ $reserva->fecha_reserva  }}</td>
                                     <td>{{ $reserva->tipo_ambiente  }}</td>
                                     <td>
-                                        <form action="{{ route('asignarAmbiente', ['id' => $reserva->id]) }}" method="GET">
+                                        <form action="{{ route('asignarAmbiente', ['id' => $reserva->id]) }}" method="GET" id="solicitudForm">
                                             @csrf
                                             <input type="hidden" name="capacidad" value="{{ $reserva->capacidad }}">
                                             <input type="hidden" name="tipo_ambiente" value="{{ $reserva->tipo_ambiente }}">

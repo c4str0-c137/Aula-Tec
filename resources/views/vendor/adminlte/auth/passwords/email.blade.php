@@ -13,7 +13,7 @@
 @section('auth_body')
 
     @if(session('status'))
-        <div class="alert alert-success">
+        <div class="custom-success-message">
             {{ session('status') }}
         </div>
     @endif
