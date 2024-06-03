@@ -11,7 +11,7 @@ class ConfiguracionController extends Controller
 public function index()
 {
     $configuracion = Configuracion::first();
-    return view('configuracion.index', compact('configuracion'));
+    return view('Configuracion.index', compact('configuracion'));
 }
 
 public function guardarConfiguracion(Request $request)
